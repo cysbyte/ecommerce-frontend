@@ -1,5 +1,6 @@
 import Item from './Item'
 import React from 'react'
+import Submenu from './Submenu'
 
 const Brand = () => {
     const data = [
@@ -33,10 +34,11 @@ const Brand = () => {
         },
     ]
   return (
-    <section className='flex gap-5 justify-center items-center h-[50px] bg-[#232f3e]'>
+    <section className='relative flex gap-5 justify-center items-center h-12 bg-[#232f3e]'>
         {data.map((item)=>(
             <Item key={item.id} name={item.name} />
         ))}
+        <Submenu />
     </section>
   )
 }
