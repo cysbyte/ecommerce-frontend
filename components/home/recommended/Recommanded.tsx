@@ -4,39 +4,39 @@ import React from 'react'
 const data = [
     {
         id: 1,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/1.jpg',
         title: 'iPhone 14 Pro Max',
-        price: 1000
+        price: 1199
     },
     {
         id: 2,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/2.jpg',
         title: 'iPhone 14 Pro Max',
-        price: 1000
+        price: 1080
     },
     {
         id: 3,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/3.jpg',
         title: 'iPhone 14 Pro Max',
         price: 1000
     },
     {
         id: 4,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/4.jpg',
         title: 'iPhone 14 Pro Max',
-        price: 1000
+        price: 1200
     },
     {
         id: 5,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/1.jpg',
         title: 'iPhone 14 Pro Max',
-        price: 1000
+        price: 800
     },
     {
         id: 6,
-        image: '/iphone/recommanded/1.png',
+        image: '/iphone/recommanded/1.jpg',
         title: 'iPhone 14 Pro Max',
-        price: 1000
+        price: 1300
     },
 ]
 const Recommanded = () => {

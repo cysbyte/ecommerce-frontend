@@ -33,7 +33,7 @@ const Brand = () => {
         },
     ]
   return (
-    <section className='flex gap-5 justify-center items-center py-3 bg-[#232f3e]'>
+    <section className='flex gap-5 justify-center items-center h-[50px] bg-[#232f3e]'>
         {data.map((item)=>(
             <Item key={item.id} name={item.name} />
         ))}

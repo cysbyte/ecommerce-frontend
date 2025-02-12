@@ -32,11 +32,11 @@ const MyCarousel = () => {
         </div>
 
       </Carousel>
-      <button className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full" onClick={handlePrev}>
+      <button className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-gray-300 p-3 rounded-full" onClick={handlePrev}>
         <FaChevronLeft size={20} />
       </button>
 
-      <button className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full" onClick={handleNext}>
+      <button className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-gray-300 p-3 rounded-full" onClick={handleNext}>
         <FaChevronRight size={20} />
       </button>
     </div>
