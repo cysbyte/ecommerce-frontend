@@ -14,8 +14,8 @@ const Header = () => {
         <Search />
       </div>
         <div className="flex justify-center items-center gap-5">
-            <Link className="text-white px-4 py-2 border border-white rounded-full font-semibold hover:bg-primary hover:text-black hover:border-primary" href='/signin'>Sign In</Link>
-            <Link className="px-4 py-2 rounded-full bg-primary/95 hover:bg-primary text-black font-semibold " href='/signup'>Sign Up</Link>
+            <Link className="text-white px-4 py-2 border border-white rounded-full font-semibold hover:bg-primary hover:text-black hover:border-primary duration-300 transition-all" href='/signin'>Sign In</Link>
+            <Link className="px-4 py-2 rounded-full bg-primary/95 hover:bg-primary text-black font-semibold duration-300 transition-all" href='/signup'>Sign Up</Link>
         </div>
     </header>
   );
