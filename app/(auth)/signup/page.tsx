@@ -6,7 +6,6 @@ import logo from "@/public/logo.png";
 import google from "@/public/auth/google.svg";
 import linkedin from "@/public/auth/linkedin.svg";
 import twitter from "@/public/auth/twitter.svg";
-import cryption from "@/public/auth/cryption.svg";
 import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
