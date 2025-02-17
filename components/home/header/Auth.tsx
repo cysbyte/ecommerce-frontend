@@ -114,7 +114,7 @@ const Auth = () => {
                     href="/profile" 
                     className="px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center gap-3"
                   >
-                    <CgProfile className="text-xl" />
+                    {item.icon}
                     {item.label}
                   </Link>
                   ))}
