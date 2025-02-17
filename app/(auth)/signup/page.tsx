@@ -78,8 +78,9 @@ const SignUp = () => {
 
     setIsLoading(true);
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await axios.post(
-        "http://localhost:3000/v1/auth/register",
+        apiUrl + "/auth/register",
         formData
       );
       if (response.data) {
@@ -111,8 +112,10 @@ const SignUp = () => {
   const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
     try {
       const token = response.credential;
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
       const res = await axios.post(
-        "http://localhost:3000/v1/auth/google-auth",
+        apiUrl + "/auth/google-auth",
         { token },
         { withCredentials: true }
       );

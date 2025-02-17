@@ -66,8 +66,10 @@ const Auth = () => {
 
   const handleLogout = async () => {
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
       // Call logout API using axios
-      await axios.post("http://localhost:3000/v1/auth/logout", {}, { withCredentials: true });
+      await axios.post(apiUrl + "/auth/logout", {}, { withCredentials: true });
 
       // Clear access token from localStorage
       localStorage.removeItem("accessToken");

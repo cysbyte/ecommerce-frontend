@@ -39,10 +39,11 @@ const SignIn = () => {
     try {
       // Validate form data
       const validatedData = signInSchema.parse(data);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
       // Call login API using axios
       const response = await axios.post(
-        "http://localhost:3000/v1/auth/login",
+        apiUrl + "/auth/login",
         validatedData,
         { withCredentials: true }
       );
@@ -88,8 +89,9 @@ const SignIn = () => {
   const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
     try {
       const token = response.credential;
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const res = await axios.post(
-        "http://localhost:3000/v1/auth/google-auth",
+        apiUrl + "/auth/google-auth",
         { token },
         { withCredentials: true }
       );
