@@ -42,7 +42,7 @@ const SignIn = () => {
 
       // Call login API using axios
       const response = await axios.post(
-        "http://localhost:3000/v1/auth/login",
+        "http://20.243.144.14:3000/v1/auth/login",
         validatedData,
         { withCredentials: true }
       );
@@ -89,7 +89,7 @@ const SignIn = () => {
     try {
       const token = response.credential;
       const res = await axios.post(
-        "http://localhost:3000/v1/auth/google-auth",
+        "http://20.243.144.14:3000/v1/auth/google-auth",
         { token },
         { withCredentials: true }
       );
