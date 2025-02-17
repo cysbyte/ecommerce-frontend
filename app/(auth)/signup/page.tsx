@@ -3,17 +3,23 @@
 import Image from "next/image";
 import React from "react";
 import logo from "@/public/logo.png";
-import google from "@/public/auth/google.svg";
-import linkedin from "@/public/auth/linkedin.svg";
-import twitter from "@/public/auth/twitter.svg";
+// import google from "@/public/auth/google.svg";
+// import linkedin from "@/public/auth/linkedin.svg";
+// import twitter from "@/public/auth/twitter.svg";
 import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from '@react-oauth/google'
+import { CredentialResponse } from '@react-oauth/google';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/app/store/features/userSlice';
 
 const SignUp = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -101,6 +107,51 @@ const SignUp = () => {
     }));
   };
 
+
+  const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
+    try {
+      const token = response.credential;
+      const res = await axios.post(
+        "http://localhost:3000/v1/auth/google-auth",
+        { token },
+        { withCredentials: true }
+      );
+
+      if (res.data) {
+        const accessToken = res.data.accessToken;
+        // Store token in localStorage
+        localStorage.setItem("accessToken", accessToken);
+        
+        // Decode token and get user data
+        const decodedToken = jwtDecode(accessToken);
+        debugger
+        const userData = decodedToken as { 
+          email: string; 
+          firstName?: string;
+          lastName?: string;
+          picture?: string;
+        };
+
+        // Update Redux store with user data
+        dispatch(setUser({
+          email: userData.email,
+          firstName: userData.firstName || '',
+          lastName: userData.lastName || '',
+          picture: userData.picture || '',
+        }));
+
+        router.push("/");
+      }
+    } catch (error) {
+      console.error('Google authentication failed:', error);
+      setError("Google authentication failed. Please try again.");
+    }
+  };
+
+  const handleError = () => {
+    console.log('Google Sign-In was unsuccessful. Try again later.');
+  };
+
   return (
     <main className="w-screen h-screen p-10 bg-[url('/bg-hero.svg')] bg-fixed bg-center">
       <Link href={"/"}>
@@ -112,8 +163,12 @@ const SignUp = () => {
           <p className="text-sm text-[#5F6166] mt-2">
             The new user will be automatically registered
           </p>
-          <div className="w-full md:max-w-[360px] flex justify-between items-center gap-2 mt-5">
-            <Image
+          <div className="w-full md:max-w-[350px] flex justify-between items-center gap-2 mt-5">
+          <GoogleLogin width={350} shape="circle"
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleError}
+            />
+            {/* <Image
               className="flex-1 cursor-pointer w-[30%]"
               src={google}
               alt=""
@@ -127,9 +182,9 @@ const SignUp = () => {
               className="flex-1 cursor-pointer w-[30%]"
               src={twitter}
               alt=""
-            />
+            /> */}
           </div>
-          <div className="w-full md:max-w-[360px] mt-5 flex flex-col gap-2">
+          <div className="w-full md:max-w-[350px] mt-5 flex flex-col gap-2">
             <form onSubmit={handleSubmit}>
               {error && (
                 <p className="text-red-500 text-sm mb-4 text-center">{error}</p>

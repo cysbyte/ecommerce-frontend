@@ -3,13 +3,19 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import logo from "@/public/logo.png";
-import google from "@/public/auth/google.svg";
-import linkedin from "@/public/auth/linkedin.svg";
-import twitter from "@/public/auth/twitter.svg";
+// import google from "@/public/auth/google.svg";
+// import linkedin from "@/public/auth/linkedin.svg";
+// import twitter from "@/public/auth/twitter.svg";
 import Link from "next/link";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/app/store/features/userSlice';
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from '@react-oauth/google'
+import { CredentialResponse } from '@react-oauth/google';
+
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -19,6 +25,7 @@ const signInSchema = z.object({
 const SignIn = () => {
   const [error, setError] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,7 +48,30 @@ const SignIn = () => {
       );
 
       if (response.data) {
-        localStorage.setItem("accessToken", response.data.accessToken);
+        const accessToken = response.data.accessToken;
+        // Store token in localStorage
+        localStorage.setItem("accessToken", accessToken);
+        
+        // Decode token and log the contents
+        const decodedToken = jwtDecode(accessToken);
+        console.log('Decoded token:', decodedToken);
+        
+        // Type assertion with optional properties
+        const userData = decodedToken as { 
+          email: string; 
+          firstName?: string;
+          lastName?: string;
+          picture?: string;
+        };
+
+        // Update Redux store with user data from token, using optional chaining
+        dispatch(setUser({
+          email: userData.email,
+          firstName: userData.firstName || '', // Provide default empty string if undefined
+          lastName: userData.lastName || '', // Provide default empty string if undefined
+          picture: userData.picture || '',
+        }));
+
         router.push("/");
       }
     } catch (err) {
@@ -55,6 +85,53 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
+    try {
+      const token = response.credential;
+      const res = await axios.post(
+        "http://localhost:3000/v1/auth/google-auth",
+        { token },
+        { withCredentials: true }
+      );
+
+      if (res.data) {
+        const accessToken = res.data.accessToken;
+        // Store token in localStorage
+        localStorage.setItem("accessToken", accessToken);
+        
+        // Decode token and get user data
+        const decodedToken = jwtDecode(accessToken);
+        debugger
+        const userData = decodedToken as { 
+          email: string; 
+          firstName?: string;
+          lastName?: string;
+          picture?: string;
+        };
+
+        // Update Redux store with user data
+        dispatch(setUser({
+          email: userData.email,
+          firstName: userData.firstName || '',
+          lastName: userData.lastName || '',
+          picture: userData.picture || '',
+        }));
+
+        router.push("/");
+      }
+    } catch (error) {
+      console.error('Google authentication failed:', error);
+      setError("Google authentication failed. Please try again.");
+    }
+  };
+
+  const handleError = () => {
+    console.log('Google Sign-In was unsuccessful. Try again later.');
+  };
+
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  console.log(googleClientId);
+
   return (
     <main className="w-screen h-screen p-10 bg-[url('/bg-hero.svg')] bg-fixed bg-center">
       <Link href={"/"}>
@@ -66,8 +143,12 @@ const SignIn = () => {
           <p className="text-sm text-[#5F6166] mt-2">
             The new user will be automatically registered
           </p>
-          <div className="w-full md:max-w-[360px] flex justify-between items-center gap-2 mt-5">
-            <Image
+          <div className="w-full md:max-w-[350px] flex justify-between items-center gap-2 mt-5">
+          <GoogleLogin width={350} shape="circle"
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleError}
+            />
+            {/* <Image
               className="flex-1 cursor-pointer w-[30%]"
               src={google}
               alt=""
@@ -81,11 +162,11 @@ const SignIn = () => {
               className="flex-1 cursor-pointer w-[30%]"
               src={twitter}
               alt=""
-            />
+            /> */}
           </div>
           <form
             onSubmit={handleSubmit}
-            className="mt-10 w-full md:max-w-[360px] flex flex-col gap-2"
+            className="mt-10 w-full md:max-w-[350px] flex flex-col gap-2"
           >
             {error && <div className="text-red-500 text-sm mb-0">{error}</div>}
             <input
