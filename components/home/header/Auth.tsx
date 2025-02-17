@@ -67,7 +67,7 @@ const Auth = () => {
   const handleLogout = async () => {
     try {
       // Call logout API using axios
-      await axios.post("http://20.243.144.14:3000/v1/auth/logout", {}, { withCredentials: true });
+      await axios.post("http://localhost:3000/v1/auth/logout", {}, { withCredentials: true });
 
       // Clear access token from localStorage
       localStorage.removeItem("accessToken");
